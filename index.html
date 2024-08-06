@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>Formulário com Autocomplete</title>
+    <style>
+
+    body{
+        font-family: "Roboto", sans-serif;
+        font-weight: 600;
+    }
+
+    .container {
+        width: 50%;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    input {
+        border-radius: 5px;
+        background-color: rgba(235, 255, 254, 0.605);
+        border: 2px solid #CCC;
+        padding: 10px;
+        text-align: center;
+        color: #000;
+        font-weight: 600;
+    }
+
+    input::placeholder{
+        color: #000;
+        font-weight: 600;
+    }
+
+    #form{
+        display: flex;
+        text-align: center;
+        align-items: center;
+        margin-top: 25px;
+    }
+
+    .input-cep {
+        background-color: rgb(255, 255, 255);
+        border: 1px solid;
+        text-align: center;
+    }
+    
+
+    .input-a {
+        width: 70%; 
+    }
+
+    .input-b {
+        width: 25%; 
+    }
+
+    .input {
+        width: 45%; 
+    }
+
+    #form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px; 
+    }
+
+    .input-rua-numero, .input-bairro-complemento, .input-cidade-estado {
+        display: flex;
+        gap: 15px; 
+        align-items: center;
+    }
+
+    .block {
+        background-color: rgb(206, 206, 206);
+        cursor: not-allowed;
+    }
+
+    @media screen and (max-width:480px){
+        .container {
+            width: 95%;
+            margin: 0 auto;
+            text-align: center;
+        }
+    }
+
+    </style>
+</head>
+<body>
+   <div class="container">
+    <label for="cep">CEP</label><br>
+    <input type="text" id="cep" inputmode="numeric" maxlength="8" class="input-cep">
+
+    <form action="" id="form">
+        <div class="input-rua-numero">
+            <input type="text" id="rua" placeholder="Rua, Avenida ou Logradouro" class="input-a">
+            <input type="text" id="numero" placeholder="Número" class="input-b">
+        </div>
+        <div class="input-bairro-complemento">
+            <input type="text" id="bairro" placeholder="Bairro" class="input">
+            <input type="text" id="complemento" placeholder="Complemento" class="input">
+        </div>
+       <div class="input-cidade-estado">
+            <input type="text" id="cidade" placeholder="Cidade" class="input-a">
+            <input type="text" id="estado" placeholder="Estado" class="input-b">
+       </div>
+    </form>
+   </div>
+
+    <script>
+
+        const inputs = form.querySelectorAll('input');
+
+        cep.addEventListener('blur', () =>{
+            fetch(`https://viacep.com.br/ws/${cep.value}/json/`)
+            .then((response)=>response.json())
+            .then((data)=>{
+                console.log(data);
+                rua.value = data.logradouro;
+                bairro.value = data.bairro;
+                cidade.value = data.localidade;
+                estado.value = data.uf;
+            })
+            setTimeout(()=>{
+                for (const input of inputs){
+                if(input.value != ''){
+                    input.classList.add('block');
+                    input.setAttribute('readonly','true');
+                }
+            }
+            },1000);
+        })
+
+    </script>
+</body>
+</html>
